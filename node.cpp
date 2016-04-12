@@ -11,16 +11,18 @@ using namespace std;
 /**
  * Constructors
  */
-Node::Node(const int val){
-    value = val;
+Node::Node(const int val, const char c){
+    frequency = val;
+    character = c;
     parent = nullptr;
     leftChild = nullptr;
     rightChild = nullptr;
 }
 
 
-Node::Node(const int val, Node * lChild, Node * rChild, Node * p){
-    value = val;
+Node::Node(const int val,const char c, Node * lChild, Node * rChild, Node * p){
+    frequency = val;
+    character = c;
     leftChild = lChild;
     rightChild = rChild;
     parent = p;
@@ -30,7 +32,8 @@ Node::Node(const int val, Node * lChild, Node * rChild, Node * p){
  * copy constructor
  */
 Node::Node(const Node & m){
-  this->value = m.value;
+  this->frequency = m.frequency;
+  this->character = m.character;
   this->leftChild = m.leftChild;
   this->rightChild = m.rightChild;
   this->parent = m.parent;
@@ -41,7 +44,8 @@ Node::Node(const Node & m){
  */
  
   Node& Node::operator = (const Node & m){
-      this->value = m.value;
+      this->frequency = m.frequency;
+      this->character = m.character;
       this->leftChild = m.leftChild;
       this->rightChild = m.rightChild;
       this->parent = m.parent;

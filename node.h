@@ -6,7 +6,8 @@ using namespace std;
 
 class Node {
 	public:
-    int value;
+    int frequency;
+    char character;
     Node * leftChild;
     Node * rightChild;
     Node * parent;
@@ -20,9 +21,9 @@ class Node {
 	/**
     * Constructors
 	*/
-    Node(const int val);
+    Node(const int val, const char c);
 
-    Node(const int val, Node * lChild, Node * rChild, Node * p);
+    Node(const int val,const char c, Node * lChild, Node * rChild, Node * p);
 	
 	/**
 	* copy constructor
