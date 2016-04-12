@@ -19,11 +19,7 @@ void nope_out(const string & name) {
 
 int main(const int argc, const char * argv []) {
 
-  if (argc != 2) {
-    cout << "Usage: " << argv[0] << " FILE" << endl;
-    exit(0);
-  } // if
-  string filename = argv[1];
+  string filename = "input.txt";
   ifstream input(filename);
 
 

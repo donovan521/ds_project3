@@ -5,11 +5,17 @@ LFLAGS = -Wall $(DEBUG)
 
 all: encode decode
 
-encode: encode.o	
-	$(CC) $(LFLAGS) -o encode encode.o
+encode: encode.o node.o binaryTree.o	
+	$(CC) $(LFLAGS) -o encode encode.o node.o binaryTree.o
 
-decode: decode.o	
-	$(CC) $(LFLAGS) -o decode decode.o
+decode: decode.o node.o binaryTree.o	
+	$(CC) $(LFLAGS) -o decode decode.o node.o binaryTree.o
+	
+binaryTree.o: binaryTree.cpp	
+	$(CC) $(CFLAGS)	binaryTree.cpp
+
+node.o: node.cpp	
+	$(CC) $(CFLAGS)	node.cpp	
 
 encode.o: encode.cpp	
 	$(CC) $(CFLAGS)	encode.cpp
@@ -23,5 +29,5 @@ clean:
 	rm -rf *.o	
   	
 run:
-	./encode input.txt
+	./encode
   
