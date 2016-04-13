@@ -123,6 +123,7 @@ int main(const int argc, const char * argv []) {
       Node * z = new Node;
       Node x;
       int qOrigSize = toHuff.size(); //debug
+      cout << "mainQ size is: " << qOrigSize<< endl;
       x = toHuff.front();
 
       toHuff.pop();
@@ -139,7 +140,7 @@ int main(const int argc, const char * argv []) {
 
       y = toHuff.front();
 
-      toHuff.pop(); //causes segfault?!
+      toHuff.pop();
       int ypos;
 
       for (int d = 0; d < charNum; d++){ //find Node in array that matches
@@ -157,7 +158,8 @@ int main(const int argc, const char * argv []) {
       //now replace x+y with z in array in terms of queuing, alter step to compensate
       //make new queue
      //  cout << toHuff.size() << " tohuff size should be -2 \n"; //DEBUG
-      queue<Node> newToHuff;
+
+      //remaking queue caused issues
    /*   for (int j = 0; j < (charNum-i);  j++){ //new queue will be charNum-i big
             if(toHuff.front().frequency > z->frequency){
                 newToHuff.push(*z);
@@ -169,14 +171,60 @@ int main(const int argc, const char * argv []) {
             cout << "j in loop = " << j << endl;
 
       } */
+       //remake queue by making a new array
+      //make sorted array // queue
+      Node newSortedQ[MAX_CHARS];
+      queue<Node> newToHuff;
 
-      if ((int)newToHuff.size() != (qOrigSize -1)){
-          cout << "new queue incorrect" << endl;
+        int afterQsize = (int)toHuff.size();
+        cout << "after a combo mainQ size is: " << afterQsize << endl;
+      //for each char we have in queue put into newQ
+
+      for(int i = 0; i < afterQsize ; i++){
+        Node temp;
+        temp = toHuff.front();
+        toHuff.pop();
+        cout << "temp f at " << i <<" is : " << temp.frequency << endl;
+        newSortedQ[i] = temp;
       }
+      newSortedQ[afterQsize] = *z;
+
+      //verify aray
+      cout << "new arrays frequencys are: " << endl;
+      for(int l = 0; l < afterQsize + 1; l++){
+          cout << " " << newSortedQ[l].frequency << " l is " << l << endl;
+      }
+
+      //sort
+      Node temp01;
+      for(int i = 0; i < afterQsize; i++){
+        for(int j = 0; j < afterQsize - i; j++){
+          if(newSortedQ[j].frequency > newSortedQ[j + 1].frequency){
+        //swap them
+        temp01 = newSortedQ[j];
+        newSortedQ[j] = newSortedQ[j+1];
+        newSortedQ[j+1] = temp01;
+          }
+        }
+      }
+      //verify aray
+      for(int l = 0; l < afterQsize + 1; l++){
+          cout << " after sort is now: " << newSortedQ[l].frequency << "  l is " << l << endl;
+      }
+
+      //push each element of array onto queue (biggest 1st)
+      for (int i = 0; i < afterQsize+1;  i++){
+          newToHuff.push(sortedQ[i]);
+      }
+      //end remaking queue
+
+
       //test if new queue valid
       cout << "1st freq in new is "<< toHuff.front().frequency << "\n and its char is" << toHuff.front().character << endl;
       toHuff = newToHuff; //queue size should decrease by 1 every time
-
+      if ((int)toHuff.size() != (qOrigSize -1)){
+          cout << "new queue incorrect" << endl;
+      }
 
 
   }
