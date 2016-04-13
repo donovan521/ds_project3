@@ -5,9 +5,13 @@
 #include <sstream>
 #include <fcntl.h>
 #include <fstream>
+#include <queue>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include "node.h"
+
+#define MAX_CHARS 128
 
 using namespace std;
 
@@ -18,59 +22,64 @@ void nope_out(const string & name) {
 
 
 int main(const int argc, const char * argv []) {
-  char ch;
-  int arSize=0;
-  string filename = "input.txt";
-  ifstream input(filename);
-  int freqArray[2][127];
-  while(input.get(ch)){
-    int asciiNum=0;
-    int flag = 0;
-    //input.get(ch);
-    asciiNum = (int)ch;
-    for(int i = 0;i<arSize;i++){
-      if(asciiNum==freqArray[0][i]){
-	flag =1;
-	freqArray[1][i] = freqArray[1][i]+1;
+
+    char ch;
+    int arSize=0;
+    string filename = "input.txt";
+    ifstream input(filename);
+    int freqArray[2][127];
+    while(input.get(ch)){
+      int asciiNum=0;
+      int flag = 0;
+      //input.get(ch);
+      asciiNum = (int)ch;
+      for(int i = 0;i<arSize;i++){
+        if(asciiNum==freqArray[0][i]){
+      flag =1;
+      freqArray[1][i] = freqArray[1][i]+1;
+        }
+      }
+      if(flag == 0){
+        freqArray[0][arSize]=asciiNum;
+        freqArray[1][arSize]=1;
+        arSize++;
       }
     }
-    if(flag == 0){
-      freqArray[0][arSize]=asciiNum;
-      freqArray[1][arSize]=1;
-      arSize++;
-    }
-  }
 
-  int temp,temp2;
-  for(int i = 0; i < arSize-1; i++){
-    for(int j = 0; j < arSize-1; j++){
-      if(freqArray[0][j+1] > freqArray[0][i]){
-	//swap them
-	temp = freqArray[0][j+1];
-	temp2 = freqArray[1][j+1];
-	freqArray[0][j+1] = freqArray[0][i];
-	freqArray[0][i] = temp;
-	freqArray[1][j+1] = freqArray[1][i];
-        freqArray[1][i] = temp2;
 
+    int temp,temp2;
+    for(int i = 0; i < arSize-1; i++){
+      for(int j = 0; j < arSize-1; j++){
+        if(freqArray[0][j+1] > freqArray[0][i]){
+      //swap them
+      temp = freqArray[0][j+1];
+      temp2 = freqArray[1][j+1];
+      freqArray[0][j+1] = freqArray[0][i];
+      freqArray[0][i] = temp;
+      freqArray[1][j+1] = freqArray[1][i];
+          freqArray[1][i] = temp2;
+
+        }
       }
     }
-  }
 
-  for(int i = 0;i<arSize-2;i++){
-    temp = freqArray[0][i+1];
-    temp2 = freqArray[1][i+1];
-    freqArray[0][i+1] = freqArray[0][i];
-    freqArray[0][i] = temp;
-    freqArray[1][i+1] = freqArray[1][i];
-    freqArray[1][i] = temp2;
-  }
-  for(int i = 0;i<arSize-1;i++){
-    char ascChar = (char)freqArray[0][i];
-    cout<<ascChar<<":"<<freqArray[1][i]<<endl;
 
-  }
-int charNum = arSize-1;
+    for(int i = 0;i<arSize-2;i++){
+      temp = freqArray[0][i+1];
+      temp2 = freqArray[1][i+1];
+      freqArray[0][i+1] = freqArray[0][i];
+      freqArray[0][i] = temp;
+      freqArray[1][i+1] = freqArray[1][i];
+      freqArray[1][i] = temp2;
+    }
+    for(int i = 0;i<arSize-1;i++){
+      char ascChar = (char)freqArray[0][i];
+      cout<<ascChar<<":"<<freqArray[1][i]<<endl;
+
+    }
+  int charNum = arSize-1;
+
+
 
   //after getting freq
   //make sorted array // queue
@@ -88,6 +97,7 @@ int charNum = arSize-1;
     sortedQ[i] = temp;
   }
 
+
   //sort
   Node temp01;
   for(int i = 0; i < charNum - 1; i++){
@@ -98,6 +108,9 @@ int charNum = arSize-1;
     sortedQ[j] = sortedQ[j+1];
     sortedQ[j+1] = temp01;
       }
+    }
+  }
+
   //push each element of array onto queue (biggest 1st)
   for (int i = 0; i < charNum;  i++){
       toHuff.push(sortedQ[i]);
@@ -164,10 +177,13 @@ int charNum = arSize-1;
       cout << "1st freq in new is "<< toHuff.front().frequency << "\n and its char is" << toHuff.front().character << endl;
       toHuff = newToHuff; //queue size should decrease by 1 every time
 
+
+
   }
   //at the end toHuff should be one node, the root of entire tree
   cout << "root val is "<< toHuff.front().frequency << "\n and its char is" << toHuff.front().character << endl;
 
   return EXIT_SUCCESS;
 } // main
+
 
